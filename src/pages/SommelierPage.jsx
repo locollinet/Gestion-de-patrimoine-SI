@@ -1,13 +1,17 @@
 /**
  * SommelierPage - Module Cave & Vins
- * Placeholder pour ÉTAPE 3
+ *
+ * Intègre :
+ * - WineCellar : vue étiquettes avec filtres apogée/région/stock
  */
 
 import { Wine } from 'lucide-react';
+import WineCellar from '../components/sommelier/WineCellar';
 
 export default function SommelierPage() {
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center gap-3">
         <div className="w-12 h-12 rounded-xl bg-sommelier/20 flex items-center justify-center">
           <Wine className="w-6 h-6 text-rose-400" />
@@ -18,12 +22,8 @@ export default function SommelierPage() {
         </div>
       </div>
 
-      <div className="card">
-        <p className="text-slate-400 text-center py-12">
-          Module Sommelier - WineCellar<br />
-          <span className="text-slate-500 text-sm">À venir dans l'ÉTAPE 3</span>
-        </p>
-      </div>
+      {/* Wine Cellar */}
+      <WineCellar />
     </div>
   );
 }

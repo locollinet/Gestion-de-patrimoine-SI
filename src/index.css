@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* HorecaOS - Midnight Luxe Design System */
+@layer base {
+  :root {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-slate-950 text-slate-200 min-h-screen;
+  }
+
+  /* Scrollbar personnalisée pour le thème sombre */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-700 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-600;
+  }
+}
+
+@layer components {
+  /* Cards - Midnight Style */
+  .card {
+    @apply bg-slate-900 border border-slate-800 rounded-xl p-4
+           transition-all duration-200 hover:border-slate-700;
+  }
+
+  .card-hover {
+    @apply hover:shadow-lg hover:shadow-slate-900/50 hover:-translate-y-0.5;
+  }
+
+  /* Boutons Touch-First (min h-14) */
+  .btn {
+    @apply h-14 px-6 rounded-xl font-medium transition-all duration-200
+           flex items-center justify-center gap-2 select-none
+           active:scale-95;
+  }
+
+  .btn-primary {
+    @apply bg-resto text-white hover:bg-orange-600;
+  }
+
+  .btn-hotel {
+    @apply bg-hotel text-white hover:bg-indigo-600;
+  }
+
+  .btn-sommelier {
+    @apply bg-sommelier text-white hover:bg-rose-800;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-slate-300 hover:bg-slate-800;
+  }
+
+  .btn-danger {
+    @apply bg-danger text-white hover:bg-red-700;
+  }
+
+  /* Badge VIP */
+  .badge-vip {
+    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full
+           bg-gradient-to-r from-amber-500 to-orange-500
+           text-xs font-bold text-white uppercase tracking-wider;
+  }
+
+  /* Badge Allergie - Animation danger */
+  .badge-allergy {
+    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full
+           bg-red-600/20 border border-red-600 text-red-400
+           text-xs font-bold uppercase tracking-wider
+           animate-pulse;
+  }
+
+  /* Stock Alert Badge */
+  .badge-stock-critical {
+    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full
+           bg-red-600 text-white text-xs font-bold
+           animate-pulse;
+  }
+
+  .badge-stock-low {
+    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full
+           bg-amber-600 text-white text-xs font-bold;
+  }
+
+  /* KPI Card */
+  .kpi-card {
+    @apply card flex flex-col gap-2;
+  }
+
+  .kpi-value {
+    @apply text-3xl font-bold tracking-tight;
+  }
+
+  .kpi-label {
+    @apply text-sm text-slate-400 uppercase tracking-wide;
+  }
+
+  /* Module Accent Colors */
+  .accent-resto {
+    @apply text-resto border-resto;
+  }
+
+  .accent-hotel {
+    @apply text-hotel border-hotel;
+  }
+
+  .accent-sommelier {
+    @apply text-sommelier border-sommelier;
+  }
+
+  /* Sidebar Navigation */
+  .nav-item {
+    @apply flex items-center gap-3 px-4 h-12 rounded-lg
+           text-slate-400 hover:text-slate-200 hover:bg-slate-800
+           transition-all duration-150 cursor-pointer select-none;
+  }
+
+  .nav-item-active {
+    @apply text-white bg-slate-800;
+  }
+
+  /* Table Grid (Touch-Friendly) */
+  .table-tile {
+    @apply aspect-square rounded-xl border-2
+           flex flex-col items-center justify-center gap-2
+           cursor-pointer transition-all duration-200
+           hover:scale-105 active:scale-95;
+  }
+
+  .table-free {
+    @apply border-emerald-600 bg-emerald-600/10 text-emerald-400;
+  }
+
+  .table-occupied {
+    @apply border-resto bg-resto/10 text-resto;
+  }
+
+  .table-reserved {
+    @apply border-amber-600 bg-amber-600/10 text-amber-400;
+  }
+
+  /* Wine Card */
+  .wine-card {
+    @apply card relative overflow-hidden;
+  }
+
+  .wine-card::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-br from-sommelier/20 to-transparent pointer-events-none;
+  }
+}
+
+@layer utilities {
+  /* Glassmorphism */
+  .glass {
+    @apply bg-slate-900/80 backdrop-blur-xl;
+  }
+
+  /* Text Gradient */
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent;
+  }
+
+  /* Safe Area for iPad */
+  .safe-area-inset {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

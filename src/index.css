@@ -1,113 +1,480 @@
+/**
+ * HorecaOS - Direction Artistique "Palace Luxe"
+ *
+ * Palette inspirée des grands palaces :
+ * - Fond : Bleu nuit profond (#0a0f1a)
+ * - Or champagne : #c9a962 (accent principal)
+ * - Ivoire : #f5f0e6 (textes clairs)
+ * - Bordeaux : #722f37 (restaurant)
+ * - Bleu royal : #1e3a5f (hôtellerie)
+ * - Vin : #6b2d3c (sommelier)
+ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* HorecaOS - Midnight Luxe Design System */
+/* ============================================================================
+   BASE STYLES
+   ============================================================================ */
+
 @layer base {
   :root {
+    /* Palette Palace */
+    --palace-midnight: #0a0f1a;
+    --palace-navy: #0d1321;
+    --palace-deep: #111827;
+    --palace-charcoal: #1a2234;
+
+    --gold-champagne: #c9a962;
+    --gold-light: #d4b872;
+    --gold-dark: #a08040;
+
+    --ivory: #f5f0e6;
+    --ivory-light: #faf8f5;
+    --ivory-muted: #d4cfc5;
+
+    --bordeaux: #722f37;
+    --bordeaux-light: #8b3d46;
+    --wine: #6b2d3c;
+
+    --royal-blue: #1e3a5f;
+    --royal-light: #2a4a70;
+
+    --emerald-palace: #2d5a4a;
+    --ruby: #9b2335;
+
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
-  body {
-    @apply bg-slate-950 text-slate-200 min-h-screen;
+  * {
+    border-color: #1e2a3d;
   }
 
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply min-h-screen;
+    background: linear-gradient(180deg, #0a0f1a 0%, #0d1321 100%);
+    color: #f5f0e6;
+  }
+
+  /* Scrollbar élégante */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-slate-900;
+    background: #0d1321;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-700 rounded-full;
+    background: #2a3548;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3a4558;
+  }
+
+  /* Selection */
+  ::selection {
+    background: rgba(201, 169, 98, 0.3);
+    color: #f5f0e6;
   }
 }
 
+/* ============================================================================
+   COMPOSANTS PALACE
+   ============================================================================ */
+
 @layer components {
+  /* Card Palace - Élégante et sobre */
   .card {
-    @apply bg-slate-900 border border-slate-800 rounded-xl p-4 transition-all duration-200 hover:border-slate-700;
+    @apply relative overflow-hidden rounded-2xl p-6;
+    background: linear-gradient(135deg, #0d1321 0%, #111827 100%);
+    border: 1px solid #1e2a3d;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   }
 
+  .card-gold {
+    @apply card;
+    border-color: rgba(201, 169, 98, 0.2);
+    box-shadow: 0 4px 20px rgba(201, 169, 98, 0.05);
+  }
+
+  /* Boutons */
   .btn {
-    @apply h-14 px-6 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 select-none active:scale-95;
+    @apply inline-flex items-center justify-center gap-2
+           h-14 px-6 rounded-xl font-medium
+           transition-all duration-200;
   }
 
-  .btn-primary {
-    @apply bg-orange-500 text-white hover:bg-orange-600;
+  .btn:active {
+    transform: scale(0.98);
   }
 
-  .btn-hotel {
-    @apply bg-indigo-500 text-white hover:bg-indigo-600;
+  .btn:disabled {
+    @apply opacity-50 cursor-not-allowed;
   }
 
-  .btn-sommelier {
-    @apply bg-rose-900 text-white hover:bg-rose-800;
+  .btn-gold {
+    @apply btn text-[#0a0f1a];
+    background: linear-gradient(135deg, #c9a962 0%, #d4b872 100%);
+  }
+
+  .btn-gold:hover {
+    box-shadow: 0 8px 25px rgba(201, 169, 98, 0.35);
+  }
+
+  .btn-outline-gold {
+    @apply btn;
+    border: 1px solid rgba(201, 169, 98, 0.5);
+    color: #c9a962;
+  }
+
+  .btn-outline-gold:hover {
+    background: rgba(201, 169, 98, 0.1);
+    border-color: #c9a962;
   }
 
   .btn-ghost {
-    @apply bg-transparent text-slate-300 hover:bg-slate-800;
+    @apply btn;
+    color: #d4cfc5;
+  }
+
+  .btn-ghost:hover {
+    color: #f5f0e6;
+    background: #1e2a3d;
+  }
+
+  .btn-primary {
+    @apply btn text-white;
+    background: linear-gradient(135deg, #722f37 0%, #8b3d46 100%);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 8px 25px rgba(114, 47, 55, 0.35);
+  }
+
+  .btn-hotel {
+    @apply btn text-white;
+    background: linear-gradient(135deg, #1e3a5f 0%, #2a4a70 100%);
+  }
+
+  .btn-hotel:hover {
+    box-shadow: 0 8px 25px rgba(30, 58, 95, 0.35);
+  }
+
+  .btn-sommelier {
+    @apply btn text-white;
+    background: linear-gradient(135deg, #6b2d3c 0%, #8b3d4c 100%);
+  }
+
+  .btn-sommelier:hover {
+    box-shadow: 0 8px 25px rgba(107, 45, 60, 0.35);
   }
 
   .btn-danger {
-    @apply bg-red-600 text-white hover:bg-red-700;
+    @apply btn text-white;
+    background: linear-gradient(135deg, #9b2335 0%, #c02942 100%);
   }
 
+  /* Input Palace */
+  .input-palace {
+    @apply w-full h-14 px-4 rounded-xl transition-all;
+    background: #0d1321;
+    border: 1px solid #1e2a3d;
+    color: #f5f0e6;
+  }
+
+  .input-palace::placeholder {
+    color: #5a6378;
+  }
+
+  .input-palace:focus {
+    outline: none;
+    border-color: rgba(201, 169, 98, 0.5);
+    box-shadow: 0 0 0 3px rgba(201, 169, 98, 0.1);
+  }
+
+  /* Badges */
   .badge-vip {
-    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-xs font-bold text-white uppercase tracking-wider;
+    @apply inline-flex items-center gap-1 px-2.5 py-1
+           text-xs font-bold rounded-full text-[#0a0f1a];
+    background: linear-gradient(135deg, #c9a962 0%, #d4b872 100%);
+    box-shadow: 0 4px 15px rgba(201, 169, 98, 0.3);
   }
 
   .badge-allergy {
-    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full bg-red-600/20 border border-red-600 text-red-400 text-xs font-bold uppercase tracking-wider animate-pulse;
+    @apply inline-flex items-center gap-1 px-2.5 py-1
+           text-xs font-bold rounded-full text-white animate-pulse;
+    background: #9b2335;
   }
 
   .badge-stock-critical {
-    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full bg-red-600 text-white text-xs font-bold animate-pulse;
+    @apply inline-flex items-center gap-1 px-2.5 py-1
+           text-xs font-bold rounded-full text-white animate-pulse;
+    background: #9b2335;
   }
 
   .badge-stock-low {
-    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full bg-amber-600 text-white text-xs font-bold;
+    @apply inline-flex items-center gap-1 px-2.5 py-1
+           text-xs font-bold rounded-full;
+    background: rgba(201, 169, 98, 0.2);
+    color: #c9a962;
   }
 
+  /* KPI Cards */
   .kpi-card {
-    @apply bg-slate-900 border border-slate-800 rounded-xl p-4 transition-all duration-200 hover:border-slate-700 flex flex-col gap-2;
+    @apply card flex flex-col gap-2;
   }
 
   .kpi-value {
-    @apply text-3xl font-bold tracking-tight;
+    @apply text-3xl font-bold tracking-tight text-[#f5f0e6];
   }
 
   .kpi-label {
-    @apply text-sm text-slate-400 uppercase tracking-wide;
+    @apply text-sm uppercase tracking-wide;
+    color: #8a9ab0;
   }
 
+  /* Navigation */
   .nav-item {
-    @apply flex items-center gap-3 px-4 h-12 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-all duration-150 cursor-pointer select-none;
+    @apply flex items-center gap-3 px-4 h-12 rounded-xl
+           transition-all duration-150 cursor-pointer select-none;
+    color: #8a9ab0;
+  }
+
+  .nav-item:hover {
+    color: #f5f0e6;
+    background: rgba(201, 169, 98, 0.08);
   }
 
   .nav-item-active {
-    @apply text-white bg-slate-800;
+    color: #c9a962 !important;
+    background: rgba(201, 169, 98, 0.12) !important;
+    border-left: 3px solid #c9a962;
   }
 
+  /* Table Tiles */
   .table-tile {
-    @apply aspect-square rounded-xl border-2 flex flex-col items-center justify-center gap-2 cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95;
+    @apply aspect-square rounded-2xl flex flex-col items-center justify-center gap-2
+           cursor-pointer transition-all duration-200;
+  }
+
+  .table-tile:hover {
+    transform: scale(1.03);
+  }
+
+  .table-tile:active {
+    transform: scale(0.97);
   }
 
   .table-free {
-    @apply border-emerald-600 bg-emerald-600/10 text-emerald-400;
+    background: rgba(45, 90, 74, 0.1);
+    border: 2px solid rgba(45, 90, 74, 0.5);
+    color: #6db89e;
+  }
+
+  .table-free:hover {
+    border-color: #2d5a4a;
+    background: rgba(45, 90, 74, 0.15);
   }
 
   .table-occupied {
-    @apply border-orange-500 bg-orange-500/10 text-orange-500;
+    background: linear-gradient(135deg, rgba(114, 47, 55, 0.15) 0%, rgba(13, 19, 33, 0.5) 100%);
+    border: 2px solid rgba(114, 47, 55, 0.5);
+    color: #cd8b94;
+  }
+
+  .table-occupied:hover {
+    border-color: #722f37;
   }
 
   .table-reserved {
-    @apply border-amber-600 bg-amber-600/10 text-amber-400;
+    background: linear-gradient(135deg, rgba(201, 169, 98, 0.1) 0%, rgba(13, 19, 33, 0.5) 100%);
+    border: 2px solid rgba(201, 169, 98, 0.3);
+    color: #c9a962;
   }
 
+  .table-reserved:hover {
+    border-color: rgba(201, 169, 98, 0.6);
+  }
+
+  /* Wine Card */
   .wine-card {
-    @apply bg-slate-900 border border-slate-800 rounded-xl p-4 transition-all duration-200 hover:border-slate-700 relative overflow-hidden;
+    @apply relative overflow-hidden rounded-2xl p-5 text-left cursor-pointer transition-all duration-300;
+    background: linear-gradient(135deg, rgba(107, 45, 60, 0.15) 0%, #0d1321 50%, #0d1321 100%);
+    border: 1px solid rgba(107, 45, 60, 0.3);
+  }
+
+  .wine-card:hover {
+    border-color: rgba(107, 45, 60, 0.6);
+    box-shadow: 0 8px 30px rgba(107, 45, 60, 0.15);
+  }
+
+  .wine-card:active {
+    transform: scale(0.98);
+  }
+
+  /* Room Card */
+  .room-card {
+    @apply relative overflow-hidden rounded-2xl p-5 cursor-pointer transition-all duration-300;
+    background: linear-gradient(135deg, rgba(30, 58, 95, 0.15) 0%, #0d1321 50%, #0d1321 100%);
+    border: 1px solid rgba(30, 58, 95, 0.3);
+  }
+
+  .room-card:hover {
+    border-color: rgba(30, 58, 95, 0.6);
+    box-shadow: 0 8px 30px rgba(30, 58, 95, 0.15);
+  }
+
+  .room-card.available {
+    border-color: rgba(45, 90, 74, 0.4);
+    background: linear-gradient(135deg, rgba(45, 90, 74, 0.1) 0%, #0d1321 50%, #0d1321 100%);
+  }
+
+  .room-card.occupied {
+    border-color: rgba(201, 169, 98, 0.3);
+    background: linear-gradient(135deg, rgba(201, 169, 98, 0.08) 0%, #0d1321 50%, #0d1321 100%);
+  }
+
+  /* Pills */
+  .pill {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5
+           text-xs font-medium rounded-full border transition-colors;
+  }
+
+  .pill-gold {
+    background: rgba(201, 169, 98, 0.1);
+    border-color: rgba(201, 169, 98, 0.3);
+    color: #c9a962;
+  }
+
+  .pill-bordeaux {
+    background: rgba(114, 47, 55, 0.15);
+    border-color: rgba(114, 47, 55, 0.3);
+    color: #cd8b94;
+  }
+
+  .pill-royal {
+    background: rgba(30, 58, 95, 0.2);
+    border-color: rgba(30, 58, 95, 0.4);
+    color: #7fa8c9;
+  }
+
+  .pill-emerald {
+    background: rgba(45, 90, 74, 0.2);
+    border-color: rgba(45, 90, 74, 0.4);
+    color: #6db89e;
+  }
+
+  .pill-ruby {
+    background: rgba(155, 35, 53, 0.2);
+    border-color: rgba(155, 35, 53, 0.3);
+    color: #e07a8a;
+  }
+
+  /* Divider */
+  .divider-gold {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(201, 169, 98, 0.3) 50%, transparent 100%);
+  }
+}
+
+/* ============================================================================
+   MODULE COLORS
+   ============================================================================ */
+
+/* Restaurant / Resto */
+.text-resto { color: #cd8b94; }
+.bg-resto { background: #722f37; }
+.border-resto { border-color: #722f37; }
+
+/* Hôtel */
+.text-hotel { color: #7fa8c9; }
+.bg-hotel { background: #1e3a5f; }
+.border-hotel { border-color: #1e3a5f; }
+
+/* Sommelier / Cave */
+.text-sommelier { color: #c9889a; }
+.bg-sommelier { background: #6b2d3c; }
+.border-sommelier { border-color: #6b2d3c; }
+
+/* Stock */
+.text-stock { color: #6db89e; }
+.bg-stock { background: #2d5a4a; }
+.border-stock { border-color: #2d5a4a; }
+
+/* VIP / Gold */
+.text-vip { color: #c9a962; }
+.bg-vip { background: #c9a962; }
+.border-vip { border-color: #c9a962; }
+
+/* ============================================================================
+   UTILITIES
+   ============================================================================ */
+
+@layer utilities {
+  /* Glow effects */
+  .glow-gold {
+    box-shadow: 0 0 30px rgba(201, 169, 98, 0.15);
+  }
+
+  .glow-bordeaux {
+    box-shadow: 0 0 30px rgba(114, 47, 55, 0.2);
+  }
+
+  /* Text gradients */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #c9a962 0%, #d4b872 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Shimmer for loading */
+  .shimmer {
+    background: linear-gradient(90deg, #1e2a3d 0%, #2a3548 50%, #1e2a3d 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE & TOUCH
+   ============================================================================ */
+
+/* Touch targets minimum 44px */
+@media (hover: none) {
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .table-tile {
+    min-height: 100px;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .no-print {
+    display: none !important;
   }
 }

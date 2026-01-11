@@ -10,7 +10,8 @@
  */
 
 import { useState, useEffect, useMemo } from 'react';
-import { supabase } from '../../lib/supabase';
+import { useBusiness } from '../../context/BusinessContext';
+import { supabase } from '../../utils/supabaseClient';
 import {
   Calendar,
   Clock,
@@ -472,6 +473,8 @@ function ReservationModal({ reservation, customers, tables, onClose, onSave }) {
 // ============================================================================
 
 export default function RestaurantReservations() {
+  const { businessId } = useBusiness();
+
   // State
   const [reservations, setReservations] = useState([]);
   const [customers, setCustomers] = useState([]);
@@ -487,8 +490,10 @@ export default function RestaurantReservations() {
   // ============================================================================
 
   useEffect(() => {
-    loadData();
-  }, []);
+    if (businessId) {
+      loadData();
+    }
+  }, [businessId]);
 
   async function loadData() {
     setLoading(true);
@@ -497,10 +502,19 @@ export default function RestaurantReservations() {
         supabase
           .from('restaurant_reservations')
           .select('*, customer:customers(*)')
-          .order('date', { ascending: true })
-          .order('time', { ascending: true }),
-        supabase.from('customers').select('*').order('last_name'),
-        supabase.from('tables').select('*').order('number'),
+          .eq('business_id', businessId)
+          .order('reservation_date', { ascending: true })
+          .order('reservation_time', { ascending: true }),
+        supabase
+          .from('customers')
+          .select('*')
+          .eq('business_id', businessId)
+          .order('full_name'),
+        supabase
+          .from('tables')
+          .select('*')
+          .eq('business_id', businessId)
+          .order('name'),
       ]);
 
       if (reservationsRes.data) setReservations(reservationsRes.data);
@@ -529,7 +543,10 @@ export default function RestaurantReservations() {
       // Create
       const { error } = await supabase
         .from('restaurant_reservations')
-        .insert(formData);
+        .insert({
+          ...formData,
+          business_id: businessId,
+        });
       if (error) throw error;
     }
     await loadData();

@@ -10,7 +10,8 @@
  */
 
 import { useState, useEffect, useMemo } from 'react';
-import { supabase } from '../lib/supabase';
+import { useBusiness } from '../context/BusinessContext';
+import { supabase } from '../utils/supabaseClient';
 import {
   Users,
   Crown,
@@ -756,6 +757,7 @@ function NewCustomerModal({ onClose, onSave }) {
 // ============================================================================
 
 export default function ClientsPage() {
+  const { businessId } = useBusiness();
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -764,8 +766,10 @@ export default function ClientsPage() {
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
   useEffect(() => {
-    loadCustomers();
-  }, []);
+    if (businessId) {
+      loadCustomers();
+    }
+  }, [businessId]);
 
   async function loadCustomers() {
     setLoading(true);
@@ -773,6 +777,7 @@ export default function ClientsPage() {
       const { data, error } = await supabase
         .from('customers')
         .select('*')
+        .eq('business_id', businessId)
         .order('is_vip', { ascending: false })
         .order('total_spent', { ascending: false });
 
@@ -785,7 +790,10 @@ export default function ClientsPage() {
   }
 
   async function handleCreateCustomer(formData) {
-    const { error } = await supabase.from('customers').insert(formData);
+    const { error } = await supabase.from('customers').insert({
+      ...formData,
+      business_id: businessId,
+    });
     if (!error) await loadCustomers();
   }
 

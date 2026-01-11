@@ -10,7 +10,8 @@
  */
 
 import { useState, useEffect, useMemo } from 'react';
-import { supabase } from '../lib/supabase';
+import { useBusiness } from '../context/BusinessContext';
+import { supabase } from '../utils/supabaseClient';
 import {
   Package,
   Wine,
@@ -417,6 +418,8 @@ function KPICard({ icon: Icon, label, value, colorClass = 'gold' }) {
 // ============================================================================
 
 export default function StocksPage() {
+  const { businessId } = useBusiness();
+
   // State
   const [ingredients, setIngredients] = useState([]);
   const [wines, setWines] = useState([]);
@@ -437,18 +440,31 @@ export default function StocksPage() {
   // ============================================================================
 
   useEffect(() => {
-    loadData();
-  }, []);
+    if (businessId) {
+      loadData();
+    }
+  }, [businessId]);
 
   async function loadData() {
     setLoading(true);
     try {
       const [ingredientsRes, winesRes, movementsRes] = await Promise.all([
-        supabase.from('ingredients').select('*').order('name'),
-        supabase.from('wines').select('*').order('name'),
+        supabase
+          .from('products')
+          .select('*')
+          .eq('business_id', businessId)
+          .eq('category', 'food')
+          .order('name'),
+        supabase
+          .from('products')
+          .select('*')
+          .eq('business_id', businessId)
+          .eq('category', 'wine')
+          .order('name'),
         supabase
           .from('stock_movements')
           .select('*')
+          .eq('business_id', businessId)
           .order('created_at', { ascending: false })
           .limit(50),
       ]);
@@ -468,14 +484,13 @@ export default function StocksPage() {
   // ============================================================================
 
   async function handleAdjustStock(item, quantity, reason, note) {
-    const isWine = 'vintage' in item;
-    const table = isWine ? 'wines' : 'ingredients';
-    const productType = isWine ? 'wine' : 'ingredient';
+    const isWine = item.category === 'wine';
+    const productType = isWine ? 'wine' : 'food';
 
     // 1. Mettre à jour le stock
     const newStock = Math.max(0, item.current_stock + quantity);
     const { error: updateError } = await supabase
-      .from(table)
+      .from('products')
       .update({ current_stock: newStock })
       .eq('id', item.id);
 
@@ -483,6 +498,7 @@ export default function StocksPage() {
 
     // 2. Enregistrer le mouvement
     const { error: movementError } = await supabase.from('stock_movements').insert({
+      business_id: businessId,
       product_id: item.id,
       product_type: productType,
       product_name: item.name,
@@ -500,8 +516,8 @@ export default function StocksPage() {
   }
 
   async function handleViewHistory(item) {
-    const isWine = 'vintage' in item;
-    const productType = isWine ? 'wine' : 'ingredient';
+    const isWine = item.category === 'wine';
+    const productType = isWine ? 'wine' : 'food';
 
     const { data } = await supabase
       .from('stock_movements')
@@ -523,14 +539,14 @@ export default function StocksPage() {
     const ingredientItems = ingredients.map((i) => ({
       ...i,
       _type: 'ingredient',
-      minimum_stock: i.minimum_stock || 10,
-      critical_stock: i.critical_stock || 5,
+      minimum_stock: i.min_stock_alert || 10,
+      critical_stock: Math.floor((i.min_stock_alert || 10) / 2),
     }));
     const wineItems = wines.map((w) => ({
       ...w,
       _type: 'wine',
-      minimum_stock: w.minimum_stock || 6,
-      critical_stock: w.critical_stock || 2,
+      minimum_stock: w.min_stock_alert || 6,
+      critical_stock: Math.floor((w.min_stock_alert || 6) / 3),
     }));
     return [...ingredientItems, ...wineItems];
   }, [ingredients, wines]);
